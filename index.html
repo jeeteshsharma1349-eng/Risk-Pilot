@@ -18,6 +18,7 @@ button{border:0;border-radius:10px;padding:11px 15px;color:white;font-weight:800
 .note{font-size:10px;color:#748196;line-height:1.5;margin-top:11px}.status{padding:10px;border-radius:10px;font-size:11px;margin-top:10px;display:none}.good{display:block;background:#0b2b1b;color:#6ee7a5}.warn{display:block;background:#35240b;color:#f5cb6b}.bad{display:block;background:#35131a;color:#ff9aa7}
 .tableWrap{overflow:auto;margin-top:10px}table{width:100%;border-collapse:collapse;font-size:10px;min-width:600px}th,td{padding:9px 7px;border-bottom:1px solid #202b3b;text-align:left}th{color:#78859a;font-weight:600}.right{text-align:right}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.fields{grid-template-columns:1fr 1fr}.app{padding:11px}}@media(max-width:430px){.fields{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
+.nextTrade{background:#1d2737!important;box-shadow:inset 3px 0 0 var(--orange)}
 </style>
 </head>
 <body>
@@ -50,16 +51,33 @@ button{border:0;border-radius:10px;padding:11px 15px;color:white;font-weight:800
 </div>
 
 <section class="panel sequence">
-<div class="title" style="display:flex;align-items:center">Sequence <span class="small" style="margin-left:auto" id="seqInfo">0 / 0</span></div>
-<div class="metrics">
-<div class="metric"><small>EVENTS WON</small><b id="won">0</b></div>
-<div class="metric"><small>EVENTS LOST</small><b id="lost">0</b></div>
+<div class="title" style="display:flex;align-items:center">
+  <span>Trade Sheet</span>
+  <span class="small" style="margin-left:auto" id="seqInfo">0 / 0 trades</span>
 </div>
-<div id="sequenceRows"></div>
+<div class="tableWrap">
+<table id="tradeTable">
+<thead>
+<tr>
+<th style="width:55px">N°</th>
+<th>RESULT</th>
+<th>TRADE AMOUNT</th>
+<th>RETURN</th>
+<th>FINAL CAPITAL</th>
+</tr>
+</thead>
+<tbody id="tradeRows"></tbody>
+</table>
+</div>
+<div class="controls" style="margin-top:12px">
+  <button class="win" onclick="record('W')">✓ WIN</button>
+  <button class="loss" onclick="record('L')">× LOSS</button>
+</div>
+<div class="note">Tap WIN or LOSS after each trade. The next trade amount is recalculated from the remaining cycle. Green = win, red = loss.</div>
 </section>
 
 <section class="panel" style="margin-top:14px">
-<div class="title">Trade Plan</div>
+<div class="title">Masaniello Calculation Details</div>
 <div class="tableWrap"><table><thead><tr><th>#</th><th>RESULT</th><th>STAKE</th><th>PAYOUT</th><th>P/L</th><th>CAPITAL</th><th>WINS LEFT</th><th>TRADES LEFT</th></tr></thead><tbody id="rows"></tbody></table></div>
 <div class="note">A Masaniello cycle is target-based: it uses total trades, expected wins and payout to calculate a changing stake. It is not a guarantee of profit; the target depends on actually reaching the planned number of wins.</div>
 </section>
@@ -133,20 +151,35 @@ function render(){
  let rows='';
  let bank=S.capital, winsSoFar=0;
  for(let i=0;i<S.N;i++){
-   const rem=S.N-i,wl=S.W-winsSoFar,o=1+S.p;
+   const rem=S.N-i, wl=S.W-winsSoFar, o=1+S.p;
    let stake=0;
    if(wl>0&&wl<=rem){
-     if(rem===1&&wl===1)stake=bank;
-     else{const T=matrix(rem,o),A=T[rem-1][wl],B=T[rem-1][wl-1];stake=Math.max(0,bank*(A-B)/(B*(o-1)+A))}
+     if(rem===1&&wl===1) stake=bank;
+     else {
+       const T=matrix(rem,o), A=T[rem-1][wl], B=T[rem-1][wl-1];
+       stake=Math.max(0,bank*(A-B)/(B*(o-1)+A));
+     }
    }
-   const result=S.results[i]||'—';
-   let pnl='—',after=bank;
+   const result=S.results[i]||'';
+   let pnl=0, after=bank;
    if(result==='W'){pnl=stake*S.p;after=bank+pnl;winsSoFar++}
    else if(result==='L'){pnl=-stake;after=bank+pnl}
-   rows+=`<tr><td>${i+1}</td><td>${result==='W'?'<span style="color:#35d07f;font-weight:800">WIN</span>':result==='L'?'<span style="color:#ff5c6d;font-weight:800">LOSS</span>':'<span style="color:#65738a">PENDING</span>'}</td><td>${money(stake)}</td><td>${(S.p*100).toFixed(2)}%</td><td>${pnl==='—'?'—':(pnl>=0?'+':'')+money(pnl)}</td><td>${money(after)}</td><td>${Math.max(0,S.W-winsSoFar)}</td><td>${Math.max(0,S.N-i-1)}</td></tr>`;
+   const resultHtml=result==='W'
+      ? '<span style="display:inline-block;background:#123b27;color:#5ee39b;padding:5px 10px;border-radius:7px;font-weight:800">W</span>'
+      : result==='L'
+      ? '<span style="display:inline-block;background:#481720;color:#ff8795;padding:5px 10px;border-radius:7px;font-weight:800">L</span>'
+      : '<span style="color:#65738a">—</span>';
+   rows+=`<tr>
+     <td><b>${i+1}</b></td>
+     <td>${resultHtml}</td>
+     <td><b>${money(stake)}</b></td>
+     <td>${result==='W'?'<span style="color:#35d07f">+'+money(pnl)+'</span>':result==='L'?'<span style="color:#ff5c6d">-'+money(Math.abs(pnl))+'</span>':'—'}</td>
+     <td><b>${money(after)}</b></td>
+   </tr>`;
    bank=after;
  }
- document.getElementById('rows').innerHTML=rows;
+ document.getElementById('tradeRows').innerHTML=rows;
+ document.getElementById('seqInfo').textContent=S.results.length+' / '+S.N+' trades';
  let sr='';
  for(let i=0;i<S.N;i++){
    const r=S.results[i]||null;
