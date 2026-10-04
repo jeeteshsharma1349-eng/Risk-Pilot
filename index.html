@@ -1,138 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>RiskPilot — Money Management Calculator</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>RiskPilot Pro</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#0b1020;color:#eef2ff}
-.wrap{max-width:980px;margin:auto;padding:22px}.brand{font-size:25px;font-weight:800;margin-bottom:4px}
-.sub{color:#94a3b8;margin-bottom:22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{background:#121a2d;border:1px solid #25304a;border-radius:18px;padding:18px;box-shadow:0 10px 30px #0003}
-h2{font-size:17px;margin:0 0 15px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-label{font-size:12px;color:#9aa8c0;display:block;margin-bottom:6px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #33415f;background:#0b1222;color:white;font-size:15px;outline:none}
-input:focus{border-color:#7c8cff}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#0b1222;border-radius:12px;padding:13px}.stat small{color:#8fa0ba}.stat b{display:block;font-size:20px;margin-top:5px}
-.next{font-size:34px;font-weight:800;margin:8px 0}.muted{color:#91a0b8;font-size:13px}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}button{border:0;border-radius:11px;padding:12px 18px;font-weight:700;cursor:pointer;color:white}
-.win{background:#15803d}.loss{background:#b91c1c}.reset{background:#334155}.primary{background:#4f46e5}
-.warning{margin-top:14px;padding:12px;border-radius:10px;background:#30220b;color:#fbbf24;display:none}
-.success{background:#0b2b1b;color:#6ee7b7}.danger{background:#351116;color:#fca5a5}
-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid #26314a}th{color:#91a0b8}
-.badge{padding:4px 8px;border-radius:999px;font-weight:700}.bwin{background:#0b3b25;color:#6ee7b7}.bloss{background:#43151b;color:#fda4af}
-.note{font-size:12px;color:#7f8da5;margin-top:12px;line-height:1.5}
-@media(max-width:720px){.grid,.fields{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.wrap{padding:14px}.next{font-size:29px}}
+:root{--bg:#070b14;--panel:#0e1524;--panel2:#111b2d;--line:#22304a;--text:#f5f7fb;--muted:#8794aa;--accent:#7c6cff;--good:#35d07f;--bad:#ff5b6e;--gold:#f5c96a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#182044 0,#070b14 38%),#070b14;color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
+.app{max-width:1100px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.logo{display:flex;gap:11px;align-items:center}.logoMark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#8a7cff,#5144d9);display:grid;place-items:center;font-weight:900;box-shadow:0 10px 30px #6758ff44}.logo h1{font-size:20px;margin:0}.logo p{margin:2px 0 0;color:var(--muted);font-size:11px}.pill{border:1px solid #2b3853;background:#0d1422;padding:8px 11px;border-radius:999px;font-size:11px;color:#aab5c8}
+.hero{background:linear-gradient(135deg,#151d34,#0c1321);border:1px solid #273452;border-radius:24px;padding:22px;box-shadow:0 20px 60px #0005;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:220px;height:220px;right:-80px;top:-100px;border-radius:50%;background:#7c6cff22;filter:blur(3px)}
+.kicker{font-size:11px;color:#9da9bd;text-transform:uppercase;letter-spacing:1.4px}.balance{font-size:42px;font-weight:850;margin:6px 0}.sub{font-size:12px;color:var(--muted)}
+.progress{height:9px;background:#1b263b;border-radius:20px;overflow:hidden;margin:18px 0 8px}.bar{height:100%;width:0;background:linear-gradient(90deg,#7c6cff,#4de19a);border-radius:20px;transition:.35s}.progressRow{display:flex;justify-content:space-between;font-size:11px;color:#9ca8bb}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:14px 0}.mini{background:#0d1524;border:1px solid var(--line);border-radius:16px;padding:14px}.mini span{font-size:10px;color:var(--muted)}.mini b{display:block;font-size:18px;margin-top:5px}
+.layout{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}.panel{background:rgba(14,21,36,.93);border:1px solid var(--line);border-radius:20px;padding:17px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.head h2{font-size:15px;margin:0}.head span{font-size:10px;color:var(--muted)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{font-size:10px;color:#8e9bb0;display:block;margin-bottom:5px}input{width:100%;background:#080e1a;border:1px solid #263550;border-radius:11px;color:white;padding:11px;font-size:13px;outline:none}input:focus{border-color:#7569ff}
+.nextBox{background:linear-gradient(135deg,#171d39,#10192a);border:1px solid #303c61;border-radius:17px;padding:17px}.nextLabel{font-size:11px;color:var(--muted)}.next{font-size:36px;font-weight:850;margin:3px 0}.formula{font-size:10px;color:#738199}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}button{border:0;color:#fff;padding:13px;border-radius:12px;font-weight:800;cursor:pointer}button:active{transform:scale(.98)}.win{background:linear-gradient(135deg,#20a965,#32d17f)}.loss{background:linear-gradient(135deg,#c9364d,#ff6070)}.reset{background:#26334a}.apply{background:linear-gradient(135deg,#6256f4,#8a7cff);width:100%;margin-top:11px}
+.alert{margin-top:11px;padding:11px;border-radius:11px;font-size:11px;display:none}.warn{display:block;background:#33280c;color:#f4cc69;border:1px solid #5b4717}.ok{display:block;background:#0b3020;color:#69e6a0;border:1px solid #145a39}.stop{display:block;background:#39131b;color:#ff9aa7;border:1px solid #68212c}
+.chart{height:150px;display:flex;align-items:end;gap:4px;padding-top:10px}.barcol{flex:1;background:linear-gradient(#766cff,#302b68);border-radius:5px 5px 2px 2px;min-height:4px;opacity:.9}
+table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;padding:10px 6px;border-bottom:1px solid #1d2940}th{color:#738198;font-weight:600}.tag{padding:4px 7px;border-radius:999px;font-size:9px;font-weight:800}.tw{background:#0b3824;color:#6ee7a5}.tl{background:#40141b;color:#ff9ba8}
+.empty{text-align:center;color:#68758b;padding:24px}.footer{text-align:center;color:#526078;font-size:10px;padding:16px}
+@media(max-width:760px){.app{padding:12px}.balance{font-size:36px}.cards{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}.fields{grid-template-columns:1fr 1fr}.panel{padding:14px}}
+@media(max-width:430px){.fields{grid-template-columns:1fr}.pill{display:none}.cards{gap:8px}.mini{padding:11px}.mini b{font-size:16px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="brand">RiskPilot</div>
-  <div class="sub">Dynamic money-management & risk calculator</div>
+<div class="app">
+<header class="top">
+ <div class="logo"><div class="logoMark">R</div><div><h1>RiskPilot <span style="color:#8d83ff">PRO</span></h1><p>Money Management Dashboard</p></div></div>
+ <div class="pill">● LIVE CALCULATOR</div>
+</header>
 
-  <div class="grid">
-    <section class="card">
-      <h2>Plan Settings</h2>
-      <div class="fields">
-        <div><label>Starting Balance</label><input id="start" type="number" min="0" step="0.01" value="1000"></div>
-        <div><label>Payout %</label><input id="payout" type="number" min="0" max="100" step="0.1" value="96"></div>
-        <div><label>Daily Target %</label><input id="target" type="number" min="0" step="0.1" value="20"></div>
-        <div><label>Base Stake %</label><input id="stakePct" type="number" min="0" step="0.1" value="2"></div>
-        <div><label>Max Risk / Trade %</label><input id="maxRisk" type="number" min="0" step="0.1" value="2"></div>
-        <div><label>Max Daily Loss %</label><input id="maxLoss" type="number" min="0" step="0.1" value="6"></div>
-      </div>
-      <div class="actions"><button class="primary" onclick="applyPlan()">Apply Plan</button><button class="reset" onclick="resetAll()">Reset</button></div>
-      <div class="note">The calculator uses the payout only to calculate the profit on a winning trade. It does not guarantee returns and stops when your configured risk limits are reached.</div>
-    </section>
+<section class="hero">
+ <div class="kicker">Current Balance</div>
+ <div class="balance" id="balance">₹0</div>
+ <div class="sub" id="pl">Today's P/L: ₹0</div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+ <div class="progressRow"><span id="progressText">0% of target</span><span id="targetText">Target ₹0</span></div>
+</section>
 
-    <section class="card">
-      <h2>Current Position</h2>
-      <div class="stats">
-        <div class="stat"><small>Balance</small><b id="balance">₹0</b></div>
-        <div class="stat"><small>Target</small><b id="targetBal">₹0</b></div>
-        <div class="stat"><small>Today's P/L</small><b id="pl">₹0</b></div>
-        <div class="stat"><small>Loss Streak</small><b id="streak">0</b></div>
-      </div>
-      <div class="muted" style="margin-top:18px">Suggested next stake</div>
-      <div class="next" id="next">₹0</div>
-      <div class="muted" id="reason">Apply your plan to begin.</div>
-      <div id="alert" class="warning"></div>
-      <div class="actions">
-        <button class="win" onclick="record('WIN')">WIN</button>
-        <button class="loss" onclick="record('LOSS')">LOSS</button>
-      </div>
-    </section>
-  </div>
+<div class="cards">
+ <div class="mini"><span>NEXT STAKE</span><b id="nextMini">₹0</b></div>
+ <div class="mini"><span>WIN RATE</span><b id="rate">0%</b></div>
+ <div class="mini"><span>TRADES</span><b id="trades">0</b></div>
+ <div class="mini"><span>LOSS STREAK</span><b id="streak">0</b></div>
+</div>
 
-  <section class="card" style="margin-top:16px">
-    <h2>Trade History</h2>
-    <div class="stats">
-      <div class="stat"><small>Trades</small><b id="trades">0</b></div>
-      <div class="stat"><small>Wins</small><b id="wins">0</b></div>
-      <div class="stat"><small>Losses</small><b id="losses">0</b></div>
-      <div class="stat"><small>Win Rate</small><b id="rate">0%</b></div>
-    </div>
-    <table><thead><tr><th>#</th><th>Result</th><th>Stake</th><th>P/L</th><th>Balance</th></tr></thead>
-    <tbody id="history"></tbody></table>
-  </section>
+<div class="layout">
+<section class="panel">
+ <div class="head"><h2>⚙ Risk Settings</h2><span>Dynamic</span></div>
+ <div class="fields">
+  <div><label>STARTING BALANCE</label><input id="start" type="number" value="1000" min="0"></div>
+  <div><label>PAYOUT %</label><input id="payout" type="number" value="96" min="0" max="100" step=".1"></div>
+  <div><label>DAILY TARGET %</label><input id="target" type="number" value="20" min="0" step=".1"></div>
+  <div><label>BASE STAKE %</label><input id="stake" type="number" value="2" min="0" step=".1"></div>
+  <div><label>MAX RISK / TRADE %</label><input id="risk" type="number" value="2" min="0" step=".1"></div>
+  <div><label>MAX DAILY LOSS %</label><input id="maxloss" type="number" value="6" min="0" step=".1"></div>
+ </div>
+ <button class="apply" onclick="apply()">APPLY / START NEW SESSION</button>
+ <div class="alert" id="alert"></div>
+</section>
+
+<section class="panel">
+ <div class="head"><h2>🧮 Next Trade</h2><span id="stateLabel">READY</span></div>
+ <div class="nextBox">
+  <div class="nextLabel">RECOMMENDED STAKE</div>
+  <div class="next" id="next">₹0</div>
+  <div class="formula">Risk-first sizing • no unlimited loss chasing</div>
+ </div>
+ <div class="actions"><button class="win" onclick="trade('WIN')">✓ WIN</button><button class="loss" onclick="trade('LOSS')">× LOSS</button></div>
+</section>
+</div>
+
+<section class="panel" style="margin-top:14px">
+ <div class="head"><h2>📈 Session Curve</h2><span>Balance by trade</span></div>
+ <div class="chart" id="chart"></div>
+</section>
+
+<section class="panel" style="margin-top:14px">
+ <div class="head"><h2>🧾 Trade History</h2><button class="reset" style="padding:7px 10px;font-size:10px" onclick="apply()">RESET</button></div>
+ <table><thead><tr><th>#</th><th>RESULT</th><th>STAKE</th><th>P/L</th><th>BALANCE</th></tr></thead><tbody id="rows"><tr><td colspan="5" class="empty">Start a session to see trades</td></tr></tbody></table>
+</section>
+<div class="footer">RiskPilot Pro • Educational calculator • No profit guarantee</div>
 </div>
 
 <script>
-let state={start:1000,balance:1000,payout:96,target:20,stakePct:2,maxRisk:2,maxLoss:6,dayPL:0,lossStreak:0,history:[]};
-
+let s={start:0,balance:0,payout:0,target:0,stake:0,risk:0,maxloss:0,pl:0,streak:0,h:[]};
 const money=n=>'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
-function val(id){return Number(document.getElementById(id).value)||0}
-
-function applyPlan(){
-  state.start=val('start'); state.balance=state.start; state.payout=val('payout');
-  state.target=val('target'); state.stakePct=val('stakePct'); state.maxRisk=val('maxRisk'); state.maxLoss=val('maxLoss');
-  state.dayPL=0;state.lossStreak=0;state.history=[];render();
-}
-function resetAll(){
-  document.getElementById('start').value=1000;document.getElementById('payout').value=96;
-  document.getElementById('target').value=20;document.getElementById('stakePct').value=2;
-  document.getElementById('maxRisk').value=2;document.getElementById('maxLoss').value=6;applyPlan();
-}
-function suggested(){
-  if(state.balance<=0)return 0;
-  const base=state.balance*(state.stakePct/100);
-  const cap=state.balance*(state.maxRisk/100);
-  // Risk-first sizing: never increase stake simply because the previous trade lost.
-  return Math.min(base,cap);
-}
-function record(result){
-  const targetBalance=state.start*(1+state.target/100);
-  const dailyLossLimit=state.start*(state.maxLoss/100);
-  if(state.balance>=targetBalance || state.dayPL<=-dailyLossLimit){render();return}
-  const stake=suggested(); if(stake<=0)return;
-  let pnl=result==='WIN'?stake*(state.payout/100):-stake;
-  state.balance+=pnl;state.dayPL+=pnl;
-  if(result==='LOSS')state.lossStreak++;else state.lossStreak=0;
-  state.history.push({result,stake,pnl,balance:state.balance});
-  render();
-}
+const n=id=>Number(document.getElementById(id).value)||0;
+function apply(){s={start:n('start'),balance:n('start'),payout:n('payout'),target:n('target'),stake:n('stake'),risk:n('risk'),maxloss:n('maxloss'),pl:0,streak:0,h:[]};render()}
+function nextStake(){return Math.max(0,Math.min(s.balance*s.stake/100,s.balance*s.risk/100))}
+function blocked(){let tb=s.start*(1+s.target/100),dl=s.start*s.maxloss/100;return s.balance>=tb||s.pl<=-dl||s.balance<=0}
+function trade(r){if(blocked())return;let st=nextStake();if(!st)return;let p=r==='WIN'?st*s.payout/100:-st;s.balance+=p;s.pl+=p;s.streak=r==='LOSS'?s.streak+1:0;s.h.push({r,st,p,b:s.balance});render()}
 function render(){
-  const targetBalance=state.start*(1+state.target/100);
-  document.getElementById('balance').textContent=money(state.balance);
-  document.getElementById('targetBal').textContent=money(targetBalance);
-  document.getElementById('pl').textContent=money(state.dayPL);
-  document.getElementById('streak').textContent=state.lossStreak;
-  document.getElementById('next').textContent=money(suggested());
-  document.getElementById('reason').textContent='Stake is capped by your configured risk-per-trade limit.';
-  const alert=document.getElementById('alert');
-  alert.style.display='block';
-  alert.className='warning';
-  if(state.balance>=targetBalance){alert.textContent='TARGET ACHIEVED — stop for the day.';alert.className='warning success'}
-  else if(state.dayPL<=-(state.start*state.maxLoss/100)){alert.textContent='DAILY LOSS LIMIT REACHED — stop for the day.';alert.className='warning danger'}
-  else if(state.lossStreak>=3){alert.textContent='3 consecutive losses. Consider pausing and reassessing.'}
-  else {alert.style.display='none'}
-  document.getElementById('trades').textContent=state.history.length;
-  const w=state.history.filter(x=>x.result==='WIN').length,l=state.history.length-w;
-  document.getElementById('wins').textContent=w;document.getElementById('losses').textContent=l;
-  document.getElementById('rate').textContent=(state.history.length?(w/state.history.length*100):0).toFixed(1)+'%';
-  document.getElementById('history').innerHTML=state.history.map((x,i)=>
-    `<tr><td>${i+1}</td><td><span class="badge ${x.result==='WIN'?'bwin':'bloss'}">${x.result}</span></td><td>${money(x.stake)}</td><td>${x.pnl>=0?'+':''}${money(x.pnl)}</td><td>${money(x.balance)}</td></tr>`
-  ).reverse().join('');
+ let tb=s.start*(1+s.target/100),pct=s.start?Math.max(0,Math.min(100,(s.balance-s.start)/(tb-s.start)*100)):0;
+ document.getElementById('balance').textContent=money(s.balance);document.getElementById('pl').textContent='Today’s P/L: '+(s.pl>=0?'+':'')+money(s.pl);
+ document.getElementById('bar').style.width=pct+'%';document.getElementById('progressText').textContent=pct.toFixed(1)+'% of target';document.getElementById('targetText').textContent='Target '+money(tb);
+ let ns=nextStake();document.getElementById('next').textContent=money(ns);document.getElementById('nextMini').textContent=money(ns);
+ let w=s.h.filter(x=>x.r==='WIN').length;document.getElementById('rate').textContent=(s.h.length?w/s.h.length*100:0).toFixed(1)+'%';document.getElementById('trades').textContent=s.h.length;document.getElementById('streak').textContent=s.streak;
+ let a=document.getElementById('alert'),lab=document.getElementById('stateLabel');a.className='alert';a.style.display='none';lab.textContent='READY';
+ if(s.balance>=tb){a.textContent='TARGET ACHIEVED — session target reached.';a.className='alert ok';a.style.display='block';lab.textContent='TARGET HIT'}
+ else if(s.pl<=-(s.start*s.maxloss/100)){a.textContent='DAILY LOSS LIMIT REACHED — stop the session.';a.className='alert stop';a.style.display='block';lab.textContent='STOP'}
+ else if(s.streak>=3){a.textContent='3 consecutive losses — consider taking a break.';a.className='alert warn';a.style.display='block';lab.textContent='CAUTION'}
+ let rows=document.getElementById('rows');rows.innerHTML=s.h.length?s.h.slice().reverse().map((x,i)=>`<tr><td>${s.h.length-i}</td><td><span class="tag ${x.r==='WIN'?'tw':'tl'}">${x.r}</span></td><td>${money(x.st)}</td><td>${x.p>=0?'+':''}${money(x.p)}</td><td>${money(x.b)}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No trades yet</td></tr>';
+ let c=document.getElementById('chart'),aVals=[s.start,...s.h.map(x=>x.b)],mx=Math.max(...aVals,1),mn=Math.min(...aVals,0),range=Math.max(mx-mn,1);c.innerHTML=aVals.map(v=>`<div class="barcol" title="${money(v)}" style="height:${Math.max(4,((v-mn)/range)*120)}px"></div>`).join('');
 }
-applyPlan();
+apply();
 </script>
 </body>
-  </html>
+                                      </html>
