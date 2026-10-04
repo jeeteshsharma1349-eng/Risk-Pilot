@@ -2,110 +2,160 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>RiskPilot Pro</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RiskPilot — Masaniello Money Management</title>
 <style>
-:root{--bg:#070b14;--panel:#0e1524;--panel2:#111b2d;--line:#22304a;--text:#f5f7fb;--muted:#8794aa;--accent:#7c6cff;--good:#35d07f;--bad:#ff5b6e;--gold:#f5c96a}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#182044 0,#070b14 38%),#070b14;color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}
-.app{max-width:1100px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.logo{display:flex;gap:11px;align-items:center}.logoMark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#8a7cff,#5144d9);display:grid;place-items:center;font-weight:900;box-shadow:0 10px 30px #6758ff44}.logo h1{font-size:20px;margin:0}.logo p{margin:2px 0 0;color:var(--muted);font-size:11px}.pill{border:1px solid #2b3853;background:#0d1422;padding:8px 11px;border-radius:999px;font-size:11px;color:#aab5c8}
-.hero{background:linear-gradient(135deg,#151d34,#0c1321);border:1px solid #273452;border-radius:24px;padding:22px;box-shadow:0 20px 60px #0005;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:220px;height:220px;right:-80px;top:-100px;border-radius:50%;background:#7c6cff22;filter:blur(3px)}
-.kicker{font-size:11px;color:#9da9bd;text-transform:uppercase;letter-spacing:1.4px}.balance{font-size:42px;font-weight:850;margin:6px 0}.sub{font-size:12px;color:var(--muted)}
-.progress{height:9px;background:#1b263b;border-radius:20px;overflow:hidden;margin:18px 0 8px}.bar{height:100%;width:0;background:linear-gradient(90deg,#7c6cff,#4de19a);border-radius:20px;transition:.35s}.progressRow{display:flex;justify-content:space-between;font-size:11px;color:#9ca8bb}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:14px 0}.mini{background:#0d1524;border:1px solid var(--line);border-radius:16px;padding:14px}.mini span{font-size:10px;color:var(--muted)}.mini b{display:block;font-size:18px;margin-top:5px}
-.layout{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}.panel{background:rgba(14,21,36,.93);border:1px solid var(--line);border-radius:20px;padding:17px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.head h2{font-size:15px;margin:0}.head span{font-size:10px;color:var(--muted)}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{font-size:10px;color:#8e9bb0;display:block;margin-bottom:5px}input{width:100%;background:#080e1a;border:1px solid #263550;border-radius:11px;color:white;padding:11px;font-size:13px;outline:none}input:focus{border-color:#7569ff}
-.nextBox{background:linear-gradient(135deg,#171d39,#10192a);border:1px solid #303c61;border-radius:17px;padding:17px}.nextLabel{font-size:11px;color:var(--muted)}.next{font-size:36px;font-weight:850;margin:3px 0}.formula{font-size:10px;color:#738199}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}button{border:0;color:#fff;padding:13px;border-radius:12px;font-weight:800;cursor:pointer}button:active{transform:scale(.98)}.win{background:linear-gradient(135deg,#20a965,#32d17f)}.loss{background:linear-gradient(135deg,#c9364d,#ff6070)}.reset{background:#26334a}.apply{background:linear-gradient(135deg,#6256f4,#8a7cff);width:100%;margin-top:11px}
-.alert{margin-top:11px;padding:11px;border-radius:11px;font-size:11px;display:none}.warn{display:block;background:#33280c;color:#f4cc69;border:1px solid #5b4717}.ok{display:block;background:#0b3020;color:#69e6a0;border:1px solid #145a39}.stop{display:block;background:#39131b;color:#ff9aa7;border:1px solid #68212c}
-.chart{height:150px;display:flex;align-items:end;gap:4px;padding-top:10px}.barcol{flex:1;background:linear-gradient(#766cff,#302b68);border-radius:5px 5px 2px 2px;min-height:4px;opacity:.9}
-table{width:100%;border-collapse:collapse;font-size:11px}th,td{text-align:left;padding:10px 6px;border-bottom:1px solid #1d2940}th{color:#738198;font-weight:600}.tag{padding:4px 7px;border-radius:999px;font-size:9px;font-weight:800}.tw{background:#0b3824;color:#6ee7a5}.tl{background:#40141b;color:#ff9ba8}
-.empty{text-align:center;color:#68758b;padding:24px}.footer{text-align:center;color:#526078;font-size:10px;padding:16px}
-@media(max-width:760px){.app{padding:12px}.balance{font-size:36px}.cards{grid-template-columns:1fr 1fr}.layout{grid-template-columns:1fr}.fields{grid-template-columns:1fr 1fr}.panel{padding:14px}}
-@media(max-width:430px){.fields{grid-template-columns:1fr}.pill{display:none}.cards{gap:8px}.mini{padding:11px}.mini b{font-size:16px}}
+:root{--bg:#070b12;--panel:#101722;--line:#263244;--text:#f5f7fb;--muted:#8d99aa;--orange:#e88928;--green:#35d07f;--red:#ff5c6d;--blue:#5c8cff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#080c13,#101725);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}.app{max-width:1100px;margin:auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.brand{font-size:21px;font-weight:850}.brand span{color:var(--orange)}.tag{font-size:10px;color:#aab5c5;border:1px solid var(--line);padding:7px 10px;border-radius:99px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}.panel{background:#101722eF;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 18px 50px #0005}
+.title{font-size:14px;font-weight:800;margin-bottom:13px}.orange{border-top:3px solid var(--orange)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{font-size:10px;color:var(--muted);display:block;margin-bottom:5px}input{width:100%;padding:11px;border-radius:10px;background:#080d15;border:1px solid #2a374b;color:#fff;outline:0}input:focus{border-color:var(--orange)}
+button{border:0;border-radius:10px;padding:11px 15px;color:white;font-weight:800;cursor:pointer}.start{background:linear-gradient(135deg,#e88928,#c86612);width:100%;margin-top:11px}.win{background:#168a50}.loss{background:#b72d43}.reset{background:#29364a}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric{background:#0a1019;border:1px solid #1d2838;border-radius:12px;padding:11px}.metric small{font-size:9px;color:var(--muted)}.metric b{display:block;font-size:18px;margin-top:4px}
+.sequence{margin-top:14px}.seq{display:flex;gap:10px;align-items:center;background:#0b111a;border:1px solid #202c3e;border-radius:11px;padding:9px;margin-top:7px}.num{width:26px;height:26px;border-radius:8px;background:#202b3d;display:grid;place-items:center;font-size:10px;font-weight:800}.res{font-weight:800;font-size:11px;width:65px}.stake{margin-left:auto;font-weight:800}.small{font-size:10px;color:var(--muted)}
+.controls{display:flex;gap:7px;margin-left:auto}.controls button{padding:7px 10px;font-size:10px}.win.active{box-shadow:0 0 0 2px #35d07f55}.loss.active{box-shadow:0 0 0 2px #ff5c6d55}
+.note{font-size:10px;color:#748196;line-height:1.5;margin-top:11px}.status{padding:10px;border-radius:10px;font-size:11px;margin-top:10px;display:none}.good{display:block;background:#0b2b1b;color:#6ee7a5}.warn{display:block;background:#35240b;color:#f5cb6b}.bad{display:block;background:#35131a;color:#ff9aa7}
+.tableWrap{overflow:auto;margin-top:10px}table{width:100%;border-collapse:collapse;font-size:10px;min-width:600px}th,td{padding:9px 7px;border-bottom:1px solid #202b3b;text-align:left}th{color:#78859a;font-weight:600}.right{text-align:right}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.fields{grid-template-columns:1fr 1fr}.app{padding:11px}}@media(max-width:430px){.fields{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="top">
- <div class="logo"><div class="logoMark">R</div><div><h1>RiskPilot <span style="color:#8d83ff">PRO</span></h1><p>Money Management Dashboard</p></div></div>
- <div class="pill">● LIVE CALCULATOR</div>
-</header>
+<header><div class="brand">RiskPilot <span>MASANIELLO</span></div><div class="tag">MONEY MANAGEMENT</div></header>
 
-<section class="hero">
- <div class="kicker">Current Balance</div>
- <div class="balance" id="balance">₹0</div>
- <div class="sub" id="pl">Today's P/L: ₹0</div>
- <div class="progress"><div class="bar" id="bar"></div></div>
- <div class="progressRow"><span id="progressText">0% of target</span><span id="targetText">Target ₹0</span></div>
-</section>
-
-<div class="cards">
- <div class="mini"><span>NEXT STAKE</span><b id="nextMini">₹0</b></div>
- <div class="mini"><span>WIN RATE</span><b id="rate">0%</b></div>
- <div class="mini"><span>TRADES</span><b id="trades">0</b></div>
- <div class="mini"><span>LOSS STREAK</span><b id="streak">0</b></div>
+<div class="grid">
+<section class="panel orange">
+<div class="title">Configure Masaniello</div>
+<div class="fields">
+<div><label>INITIAL CAPITAL</label><input id="capital" type="number" min="0" step=".01" value="300"></div>
+<div><label>TOTAL TRADES</label><input id="trades" type="number" min="2" max="100" value="6"></div>
+<div><label>EXPECTED WINS</label><input id="wins" type="number" min="1" value="1"></div>
+<div><label>PAYOUT %</label><input id="payout" type="number" min="0.01" max="1000" step=".01" value="96"></div>
 </div>
-
-<div class="layout">
-<section class="panel">
- <div class="head"><h2>⚙ Risk Settings</h2><span>Dynamic</span></div>
- <div class="fields">
-  <div><label>STARTING BALANCE</label><input id="start" type="number" value="1000" min="0"></div>
-  <div><label>PAYOUT %</label><input id="payout" type="number" value="96" min="0" max="100" step=".1"></div>
-  <div><label>DAILY TARGET %</label><input id="target" type="number" value="20" min="0" step=".1"></div>
-  <div><label>BASE STAKE %</label><input id="stake" type="number" value="2" min="0" step=".1"></div>
-  <div><label>MAX RISK / TRADE %</label><input id="risk" type="number" value="2" min="0" step=".1"></div>
-  <div><label>MAX DAILY LOSS %</label><input id="maxloss" type="number" value="6" min="0" step=".1"></div>
- </div>
- <button class="apply" onclick="apply()">APPLY / START NEW SESSION</button>
- <div class="alert" id="alert"></div>
+<button class="start" onclick="newCycle()">CALCULATE MASANIELLO</button>
+<div class="note">Set the cycle bank, number of events, expected wins and payout. The stake is recalculated after every recorded result.</div>
 </section>
 
 <section class="panel">
- <div class="head"><h2>🧮 Next Trade</h2><span id="stateLabel">READY</span></div>
- <div class="nextBox">
-  <div class="nextLabel">RECOMMENDED STAKE</div>
-  <div class="next" id="next">₹0</div>
-  <div class="formula">Risk-first sizing • no unlimited loss chasing</div>
- </div>
- <div class="actions"><button class="win" onclick="trade('WIN')">✓ WIN</button><button class="loss" onclick="trade('LOSS')">× LOSS</button></div>
+<div class="title">Wining Masaniello</div>
+<div class="metrics">
+<div class="metric"><small>CAPITAL FINAL</small><b id="final">₹0</b></div>
+<div class="metric"><small>PROFIT</small><b id="profit">₹0</b></div>
+<div class="metric"><small>RETURN</small><b id="return">0%</b></div>
+<div class="metric"><small>EXPECTED WIN %</small><b id="winpct">0%</b></div>
+</div>
+<div id="status" class="status"></div>
 </section>
 </div>
 
-<section class="panel" style="margin-top:14px">
- <div class="head"><h2>📈 Session Curve</h2><span>Balance by trade</span></div>
- <div class="chart" id="chart"></div>
+<section class="panel sequence">
+<div class="title" style="display:flex;align-items:center">Sequence <span class="small" style="margin-left:auto" id="seqInfo">0 / 0</span></div>
+<div class="metrics">
+<div class="metric"><small>EVENTS WON</small><b id="won">0</b></div>
+<div class="metric"><small>EVENTS LOST</small><b id="lost">0</b></div>
+</div>
+<div id="sequenceRows"></div>
 </section>
 
 <section class="panel" style="margin-top:14px">
- <div class="head"><h2>🧾 Trade History</h2><button class="reset" style="padding:7px 10px;font-size:10px" onclick="apply()">RESET</button></div>
- <table><thead><tr><th>#</th><th>RESULT</th><th>STAKE</th><th>P/L</th><th>BALANCE</th></tr></thead><tbody id="rows"><tr><td colspan="5" class="empty">Start a session to see trades</td></tr></tbody></table>
+<div class="title">Trade Plan</div>
+<div class="tableWrap"><table><thead><tr><th>#</th><th>RESULT</th><th>STAKE</th><th>PAYOUT</th><th>P/L</th><th>CAPITAL</th><th>WINS LEFT</th><th>TRADES LEFT</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="note">A Masaniello cycle is target-based: it uses total trades, expected wins and payout to calculate a changing stake. It is not a guarantee of profit; the target depends on actually reaching the planned number of wins.</div>
 </section>
-<div class="footer">RiskPilot Pro • Educational calculator • No profit guarantee</div>
 </div>
 
 <script>
-let s={start:0,balance:0,payout:0,target:0,stake:0,risk:0,maxloss:0,pl:0,streak:0,h:[]};
-const money=n=>'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
-const n=id=>Number(document.getElementById(id).value)||0;
-function apply(){s={start:n('start'),balance:n('start'),payout:n('payout'),target:n('target'),stake:n('stake'),risk:n('risk'),maxloss:n('maxloss'),pl:0,streak:0,h:[]};render()}
-function nextStake(){return Math.max(0,Math.min(s.balance*s.stake/100,s.balance*s.risk/100))}
-function blocked(){let tb=s.start*(1+s.target/100),dl=s.start*s.maxloss/100;return s.balance>=tb||s.pl<=-dl||s.balance<=0}
-function trade(r){if(blocked())return;let st=nextStake();if(!st)return;let p=r==='WIN'?st*s.payout/100:-st;s.balance+=p;s.pl+=p;s.streak=r==='LOSS'?s.streak+1:0;s.h.push({r,st,p,b:s.balance});render()}
-function render(){
- let tb=s.start*(1+s.target/100),pct=s.start?Math.max(0,Math.min(100,(s.balance-s.start)/(tb-s.start)*100)):0;
- document.getElementById('balance').textContent=money(s.balance);document.getElementById('pl').textContent='Today’s P/L: '+(s.pl>=0?'+':'')+money(s.pl);
- document.getElementById('bar').style.width=pct+'%';document.getElementById('progressText').textContent=pct.toFixed(1)+'% of target';document.getElementById('targetText').textContent='Target '+money(tb);
- let ns=nextStake();document.getElementById('next').textContent=money(ns);document.getElementById('nextMini').textContent=money(ns);
- let w=s.h.filter(x=>x.r==='WIN').length;document.getElementById('rate').textContent=(s.h.length?w/s.h.length*100:0).toFixed(1)+'%';document.getElementById('trades').textContent=s.h.length;document.getElementById('streak').textContent=s.streak;
- let a=document.getElementById('alert'),lab=document.getElementById('stateLabel');a.className='alert';a.style.display='none';lab.textContent='READY';
- if(s.balance>=tb){a.textContent='TARGET ACHIEVED — session target reached.';a.className='alert ok';a.style.display='block';lab.textContent='TARGET HIT'}
- else if(s.pl<=-(s.start*s.maxloss/100)){a.textContent='DAILY LOSS LIMIT REACHED — stop the session.';a.className='alert stop';a.style.display='block';lab.textContent='STOP'}
- else if(s.streak>=3){a.textContent='3 consecutive losses — consider taking a break.';a.className='alert warn';a.style.display='block';lab.textContent='CAUTION'}
- let rows=document.getElementById('rows');rows.innerHTML=s.h.length?s.h.slice().reverse().map((x,i)=>`<tr><td>${s.h.length-i}</td><td><span class="tag ${x.r==='WIN'?'tw':'tl'}">${x.r}</span></td><td>${money(x.st)}</td><td>${x.p>=0?'+':''}${money(x.p)}</td><td>${money(x.b)}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No trades yet</td></tr>';
- let c=document.getElementById('chart'),aVals=[s.start,...s.h.map(x=>x.b)],mx=Math.max(...aVals,1),mn=Math.min(...aVals,0),range=Math.max(mx-mn,1);c.innerHTML=aVals.map(v=>`<div class="barcol" title="${money(v)}" style="height:${Math.max(4,((v-mn)/range)*120)}px"></div>`).join('');
+let S={capital:0,N:0,W:0,p:0,results:[],bank:0};
+
+const money=x=>'₹'+Number(x).toLocaleString('en-IN',{maximumFractionDigits:2});
+function matrix(N,o){
+ const T=Array.from({length:N+1},()=>Array(N+1).fill(0));
+ for(let n=0;n<=N;n++){T[n][0]=1;T[n][n]=Math.pow(o,n)}
+ for(let n=2;n<=N;n++){
+   for(let k=1;k<n;k++){
+     const A=T[n-1][k],B=T[n-1][k-1];
+     const f=(A-B)/(B*(o-1)+A);
+     T[n][k]=(1-f)*A;
+   }
+ }
+ return T;
 }
-apply();
+function settings(){
+ S.capital=Number(document.getElementById('capital').value)||0;
+ S.N=Math.max(2,Math.min(100,Math.floor(Number(document.getElementById('trades').value)||2)));
+ S.W=Math.max(1,Math.min(S.N-1,Math.floor(Number(document.getElementById('wins').value)||1)));
+ S.p=(Number(document.getElementById('payout').value)||0)/100;
+ S.bank=S.capital;S.results=[];
+}
+function cycleFinal(){
+ if(!S.capital||!S.p)return 0;
+ const T=matrix(S.N,1+S.p);
+ return S.capital*T[S.N][S.W];
+}
+function currentStake(){
+ const i=S.results.length;
+ const rem=S.N-i, winsLeft=S.W-S.results.filter(x=>x==='W').length;
+ if(rem<=0||winsLeft<=0)return 0;
+ if(winsLeft>rem)return 0;
+ const o=1+S.p,T=matrix(rem,o);
+ if(rem===1&&winsLeft===1)return S.bank;
+ const A=T[rem-1][winsLeft],B=T[rem-1][winsLeft-1];
+ const f=(A-B)/(B*(o-1)+A);
+ return Math.max(0,S.bank*f);
+}
+function newCycle(){settings();render()}
+function record(r){
+ const wins=S.results.filter(x=>x==='W').length;
+ const rem=S.N-S.results.length;
+ if(rem<=0||wins>=S.W||S.bank<=0)return;
+ if(S.W-wins>rem)return;
+ const st=currentStake();
+ if(st<=0)return;
+ S.results.push(r);
+ S.bank += r==='W'?st*S.p:-st;
+ render();
+}
+function render(){
+ const target=cycleFinal(),profit=target-S.capital;
+ document.getElementById('final').textContent=money(target);
+ document.getElementById('profit').textContent=(profit>=0?'+':'')+money(profit);
+ document.getElementById('return').textContent=S.capital?(profit/S.capital*100).toFixed(2)+'%':'0%';
+ document.getElementById('winpct').textContent=S.N?(S.W/S.N*100).toFixed(2)+'%':'0%';
+ const won=S.results.filter(x=>x==='W').length,lost=S.results.length-won;
+ document.getElementById('won').textContent=won;document.getElementById('lost').textContent=lost;
+ document.getElementById('seqInfo').textContent=S.results.length+' / '+S.N;
+ const st=currentStake();
+ let status=document.getElementById('status');status.className='status';status.style.display='none';
+ if(won>=S.W){status.textContent='TARGET WINS REACHED — cycle can be closed.';status.className='status good';status.style.display='block'}
+ else if(S.W-won>S.N-S.results.length){status.textContent='TARGET NO LONGER REACHABLE — cycle stopped.';status.className='status bad';status.style.display='block'}
+ else if(st>=S.bank*.5){status.textContent='HIGH RISK STATE — the next calculated stake is very large relative to the remaining capital.';status.className='status warn';status.style.display='block'}
+ let rows='';
+ let bank=S.capital, winsSoFar=0;
+ for(let i=0;i<S.N;i++){
+   const rem=S.N-i,wl=S.W-winsSoFar,o=1+S.p;
+   let stake=0;
+   if(wl>0&&wl<=rem){
+     if(rem===1&&wl===1)stake=bank;
+     else{const T=matrix(rem,o),A=T[rem-1][wl],B=T[rem-1][wl-1];stake=Math.max(0,bank*(A-B)/(B*(o-1)+A))}
+   }
+   const result=S.results[i]||'—';
+   let pnl='—',after=bank;
+   if(result==='W'){pnl=stake*S.p;after=bank+pnl;winsSoFar++}
+   else if(result==='L'){pnl=-stake;after=bank+pnl}
+   rows+=`<tr><td>${i+1}</td><td>${result==='W'?'<span style="color:#35d07f;font-weight:800">WIN</span>':result==='L'?'<span style="color:#ff5c6d;font-weight:800">LOSS</span>':'<span style="color:#65738a">PENDING</span>'}</td><td>${money(stake)}</td><td>${(S.p*100).toFixed(2)}%</td><td>${pnl==='—'?'—':(pnl>=0?'+':'')+money(pnl)}</td><td>${money(after)}</td><td>${Math.max(0,S.W-winsSoFar)}</td><td>${Math.max(0,S.N-i-1)}</td></tr>`;
+   bank=after;
+ }
+ document.getElementById('rows').innerHTML=rows;
+ let sr='';
+ for(let i=0;i<S.N;i++){
+   const r=S.results[i]||null;
+   const isNext=i===S.results.length;
+   sr+=`<div class="seq"><div class="num">${i+1}</div><div class="res">${r==='W'?'WIN':r==='L'?'LOSS':isNext?'NEXT':'WAIT'}</div><div class="small">${isNext?'Suggested '+money(st):r?'Recorded result':'Not played'}</div>${isNext?'<div class="controls"><button class="win" onclick="record(\\'W\\')">W</button><button class="loss" onclick="record(\\'L\\')">L</button></div>':''}</div>`;
+ }
+ document.getElementById('sequenceRows').innerHTML=sr;
+}
+newCycle();
 </script>
 </body>
-                                      </html>
+ </html>
