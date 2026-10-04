@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>RiskPilot — Money Management Calculator</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#0b1020;color:#eef2ff}
+.wrap{max-width:980px;margin:auto;padding:22px}.brand{font-size:25px;font-weight:800;margin-bottom:4px}
+.sub{color:#94a3b8;margin-bottom:22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:#121a2d;border:1px solid #25304a;border-radius:18px;padding:18px;box-shadow:0 10px 30px #0003}
+h2{font-size:17px;margin:0 0 15px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-size:12px;color:#9aa8c0;display:block;margin-bottom:6px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #33415f;background:#0b1222;color:white;font-size:15px;outline:none}
+input:focus{border-color:#7c8cff}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#0b1222;border-radius:12px;padding:13px}.stat small{color:#8fa0ba}.stat b{display:block;font-size:20px;margin-top:5px}
+.next{font-size:34px;font-weight:800;margin:8px 0}.muted{color:#91a0b8;font-size:13px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}button{border:0;border-radius:11px;padding:12px 18px;font-weight:700;cursor:pointer;color:white}
+.win{background:#15803d}.loss{background:#b91c1c}.reset{background:#334155}.primary{background:#4f46e5}
+.warning{margin-top:14px;padding:12px;border-radius:10px;background:#30220b;color:#fbbf24;display:none}
+.success{background:#0b2b1b;color:#6ee7b7}.danger{background:#351116;color:#fca5a5}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid #26314a}th{color:#91a0b8}
+.badge{padding:4px 8px;border-radius:999px;font-weight:700}.bwin{background:#0b3b25;color:#6ee7b7}.bloss{background:#43151b;color:#fda4af}
+.note{font-size:12px;color:#7f8da5;margin-top:12px;line-height:1.5}
+@media(max-width:720px){.grid,.fields{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.wrap{padding:14px}.next{font-size:29px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">RiskPilot</div>
+  <div class="sub">Dynamic money-management & risk calculator</div>
 
+  <div class="grid">
+    <section class="card">
+      <h2>Plan Settings</h2>
+      <div class="fields">
+        <div><label>Starting Balance</label><input id="start" type="number" min="0" step="0.01" value="1000"></div>
+        <div><label>Payout %</label><input id="payout" type="number" min="0" max="100" step="0.1" value="96"></div>
+        <div><label>Daily Target %</label><input id="target" type="number" min="0" step="0.1" value="20"></div>
+        <div><label>Base Stake %</label><input id="stakePct" type="number" min="0" step="0.1" value="2"></div>
+        <div><label>Max Risk / Trade %</label><input id="maxRisk" type="number" min="0" step="0.1" value="2"></div>
+        <div><label>Max Daily Loss %</label><input id="maxLoss" type="number" min="0" step="0.1" value="6"></div>
+      </div>
+      <div class="actions"><button class="primary" onclick="applyPlan()">Apply Plan</button><button class="reset" onclick="resetAll()">Reset</button></div>
+      <div class="note">The calculator uses the payout only to calculate the profit on a winning trade. It does not guarantee returns and stops when your configured risk limits are reached.</div>
+    </section>
+
+    <section class="card">
+      <h2>Current Position</h2>
+      <div class="stats">
+        <div class="stat"><small>Balance</small><b id="balance">₹0</b></div>
+        <div class="stat"><small>Target</small><b id="targetBal">₹0</b></div>
+        <div class="stat"><small>Today's P/L</small><b id="pl">₹0</b></div>
+        <div class="stat"><small>Loss Streak</small><b id="streak">0</b></div>
+      </div>
+      <div class="muted" style="margin-top:18px">Suggested next stake</div>
+      <div class="next" id="next">₹0</div>
+      <div class="muted" id="reason">Apply your plan to begin.</div>
+      <div id="alert" class="warning"></div>
+      <div class="actions">
+        <button class="win" onclick="record('WIN')">WIN</button>
+        <button class="loss" onclick="record('LOSS')">LOSS</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px">
+    <h2>Trade History</h2>
+    <div class="stats">
+      <div class="stat"><small>Trades</small><b id="trades">0</b></div>
+      <div class="stat"><small>Wins</small><b id="wins">0</b></div>
+      <div class="stat"><small>Losses</small><b id="losses">0</b></div>
+      <div class="stat"><small>Win Rate</small><b id="rate">0%</b></div>
+    </div>
+    <table><thead><tr><th>#</th><th>Result</th><th>Stake</th><th>P/L</th><th>Balance</th></tr></thead>
+    <tbody id="history"></tbody></table>
+  </section>
+</div>
+
+<script>
+let state={start:1000,balance:1000,payout:96,target:20,stakePct:2,maxRisk:2,maxLoss:6,dayPL:0,lossStreak:0,history:[]};
+
+const money=n=>'₹'+Number(n).toLocaleString('en-IN',{maximumFractionDigits:2});
+function val(id){return Number(document.getElementById(id).value)||0}
+
+function applyPlan(){
+  state.start=val('start'); state.balance=state.start; state.payout=val('payout');
+  state.target=val('target'); state.stakePct=val('stakePct'); state.maxRisk=val('maxRisk'); state.maxLoss=val('maxLoss');
+  state.dayPL=0;state.lossStreak=0;state.history=[];render();
+}
+function resetAll(){
+  document.getElementById('start').value=1000;document.getElementById('payout').value=96;
+  document.getElementById('target').value=20;document.getElementById('stakePct').value=2;
+  document.getElementById('maxRisk').value=2;document.getElementById('maxLoss').value=6;applyPlan();
+}
+function suggested(){
+  if(state.balance<=0)return 0;
+  const base=state.balance*(state.stakePct/100);
+  const cap=state.balance*(state.maxRisk/100);
+  // Risk-first sizing: never increase stake simply because the previous trade lost.
+  return Math.min(base,cap);
+}
+function record(result){
+  const targetBalance=state.start*(1+state.target/100);
+  const dailyLossLimit=state.start*(state.maxLoss/100);
+  if(state.balance>=targetBalance || state.dayPL<=-dailyLossLimit){render();return}
+  const stake=suggested(); if(stake<=0)return;
+  let pnl=result==='WIN'?stake*(state.payout/100):-stake;
+  state.balance+=pnl;state.dayPL+=pnl;
+  if(result==='LOSS')state.lossStreak++;else state.lossStreak=0;
+  state.history.push({result,stake,pnl,balance:state.balance});
+  render();
+}
+function render(){
+  const targetBalance=state.start*(1+state.target/100);
+  document.getElementById('balance').textContent=money(state.balance);
+  document.getElementById('targetBal').textContent=money(targetBalance);
+  document.getElementById('pl').textContent=money(state.dayPL);
+  document.getElementById('streak').textContent=state.lossStreak;
+  document.getElementById('next').textContent=money(suggested());
+  document.getElementById('reason').textContent='Stake is capped by your configured risk-per-trade limit.';
+  const alert=document.getElementById('alert');
+  alert.style.display='block';
+  alert.className='warning';
+  if(state.balance>=targetBalance){alert.textContent='TARGET ACHIEVED — stop for the day.';alert.className='warning success'}
+  else if(state.dayPL<=-(state.start*state.maxLoss/100)){alert.textContent='DAILY LOSS LIMIT REACHED — stop for the day.';alert.className='warning danger'}
+  else if(state.lossStreak>=3){alert.textContent='3 consecutive losses. Consider pausing and reassessing.'}
+  else {alert.style.display='none'}
+  document.getElementById('trades').textContent=state.history.length;
+  const w=state.history.filter(x=>x.result==='WIN').length,l=state.history.length-w;
+  document.getElementById('wins').textContent=w;document.getElementById('losses').textContent=l;
+  document.getElementById('rate').textContent=(state.history.length?(w/state.history.length*100):0).toFixed(1)+'%';
+  document.getElementById('history').innerHTML=state.history.map((x,i)=>
+    `<tr><td>${i+1}</td><td><span class="badge ${x.result==='WIN'?'bwin':'bloss'}">${x.result}</span></td><td>${money(x.stake)}</td><td>${x.pnl>=0?'+':''}${money(x.pnl)}</td><td>${money(x.balance)}</td></tr>`
+  ).reverse().join('');
+}
+applyPlan();
+</script>
+</body>
+  </html>
